@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#120d0a" />
+    <meta name="description" content="Рог Одина: слушает музыку через микрофон, показывает эквалайзер и танцующих викингов у костра." />
+    <title>Рог Одина</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%235a3a22' stroke='%23999' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23ccc'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cormorant+SC:wght@600;700&family=Noto+Sans+Runic&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
+    <script type="module" crossorigin src="./assets/index-CklVaFka.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BBiuC_KQ.css">
+  </head>
+  <body>
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <div class="vignette" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="brand">
+        <h1>Рог Одина</h1>
+        <p class="runes" aria-hidden="true">ᚱᛟᚷ ᛟᛞᛁᚾᚨ · ᛗᚢᛋᛁᚲ</p>
+      </div>
+      <button class="iron-btn" id="settings-toggle" aria-expanded="false" aria-controls="settings">
+        <span aria-hidden="true">⚙</span> Настройки
+      </button>
+    </header>
+
+    <aside class="panel settings" id="settings" hidden>
+      <h2>Настройки</h2>
+      <label class="field" id="mic-field" hidden>
+        <span>Микрофон</span>
+        <select id="mic-select"></select>
+      </label>
+      <label class="field">
+        <span>Чувствительность <output id="sens-out">0 дБ</output></span>
+        <input type="range" id="sens" min="-20" max="20" step="1" value="0" />
+      </label>
+      <label class="switch">
+        <input type="checkbox" id="anim-toggle" checked />
+        <span class="switch-track" aria-hidden="true"></span>
+        <span>Анимация вкл/выкл</span>
+      </label>
+      <label class="field">
+        <span>Качество графики</span>
+        <select id="quality">
+          <option value="auto">Авто</option>
+          <option value="high">Высокое (5 викингов)</option>
+          <option value="low">Низкое (3 викинга)</option>
+        </select>
+      </label>
+      <p class="hint">Тихо в комнате, а индикатор показывает музыку? Уменьшите чувствительность. Музыка играет, а викинги стоят? Увеличьте.</p>
+    </aside>
+
+    <main class="hud">
+      <section class="listen" aria-label="Прослушивание">
+        <div class="shield-wrap">
+          <canvas id="ring" class="ring" aria-hidden="true"></canvas>
+          <button id="listen-btn" class="shield" aria-pressed="false">
+            <svg viewBox="0 0 200 200" aria-hidden="true" class="shield-svg">
+              <defs>
+                <radialGradient id="wood" cx="50%" cy="45%" r="60%">
+                  <stop offset="0" stop-color="#7a4f2c" />
+                  <stop offset="0.7" stop-color="#4a2c17" />
+                  <stop offset="1" stop-color="#2a170b" />
+                </radialGradient>
+                <radialGradient id="boss" cx="40%" cy="35%" r="70%">
+                  <stop offset="0" stop-color="#e8edf2" />
+                  <stop offset="0.5" stop-color="#8d969f" />
+                  <stop offset="1" stop-color="#3a4047" />
+                </radialGradient>
+                <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#b8c0c8" />
+                  <stop offset="0.5" stop-color="#5b636c" />
+                  <stop offset="1" stop-color="#9aa3ac" />
+                </linearGradient>
+                <path id="rune-path" d="M100,100 m-70,0 a70,70 0 1,1 140,0 a70,70 0 1,1 -140,0" />
+              </defs>
+              <circle cx="100" cy="100" r="94" fill="url(#wood)" />
+              <g stroke="#2a170b" stroke-width="1.5" opacity="0.7">
+                <line x1="40" y1="20" x2="40" y2="180" />
+                <line x1="70" y1="8" x2="70" y2="192" />
+                <line x1="100" y1="6" x2="100" y2="194" />
+                <line x1="130" y1="8" x2="130" y2="192" />
+                <line x1="160" y1="20" x2="160" y2="180" />
+              </g>
+              <text class="shield-runes" font-size="15">
+                <textPath href="#rune-path">ᚠᚢᚦᚨᚱᚲ ᚷᚹᚺᚾᛁᛃ ᛇᛈᛉᛊᛏᛒ ᛖᛗᛚᛜᛞᛟ ᚠᚢᚦᚨ</textPath>
+              </text>
+              <circle cx="100" cy="100" r="94" fill="none" stroke="url(#rim)" stroke-width="9" />
+              <g fill="#cfd6dc">
+                <circle cx="100" cy="11" r="3" /><circle cx="189" cy="100" r="3" />
+                <circle cx="100" cy="189" r="3" /><circle cx="11" cy="100" r="3" />
+                <circle cx="163" cy="37" r="3" /><circle cx="163" cy="163" r="3" />
+                <circle cx="37" cy="163" r="3" /><circle cx="37" cy="37" r="3" />
+              </g>
+              <circle cx="100" cy="100" r="40" fill="url(#boss)" stroke="#2c3137" stroke-width="3" />
+            </svg>
+            <span class="shield-label" id="listen-label">Слушать</span>
+          </button>
+        </div>
+
+        <div class="panel status" aria-live="polite">
+          <div class="status-row">
+            <span class="state-dot" id="state-dot" aria-hidden="true"></span>
+            <strong id="state-text">Не слушаю</strong>
+          </div>
+          <div class="meter-row">
+            <span class="meter-label">Громкость</span>
+            <div class="meter" aria-hidden="true"><div class="meter-fill" id="vol-fill"></div></div>
+            <span class="meter-num" id="vol-text">-</span>
+          </div>
+          <div class="meter-row">
+            <span class="meter-label">Темп</span>
+            <span class="bpm" id="bpm-text">-</span>
+            <span class="beat-dot" id="beat-dot" aria-hidden="true"></span>
+          </div>
+        </div>
+      </section>
+
+      <div class="message panel" id="message" role="alert" hidden>
+        <button class="close" id="message-close" aria-label="Закрыть">×</button>
+        <h3 id="message-title"></h3>
+        <div id="message-body"></div>
+      </div>
+
+      <section class="panel eq" id="eq" aria-label="Эквалайзер">
+        <div class="eq-head">
+          <h2>Эквалайзер</h2>
+          <div class="presets" id="presets" role="group" aria-label="Пресеты"></div>
+          <button class="eq-collapse" id="eq-collapse" aria-expanded="true" aria-label="Свернуть эквалайзер">▾</button>
+        </div>
+        <div class="eq-body">
+          <canvas class="eq-canvas" aria-hidden="true"></canvas>
+          <div class="eq-sliders"></div>
+          <p class="eq-note">Ползунки ±12 дБ меняют чувствительность отображения полосы. Двойной щелчок сбрасывает в 0.</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="loading" id="loading">Готовим костёр…</div>
+
+  </body>
+</html>
